@@ -4,6 +4,14 @@ import DataTable from "react-data-table-component";
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 import 'boxicons/css/boxicons.min.css';
+
+
+
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
+
 const columns = [
   {
     name: "Titre",
@@ -62,8 +70,26 @@ const columns = [
   }
 ];
 
+
+
+
+
+
+
 export default function Offres(props) {  
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   
+  const mystyle = {
+    backgroundcolor: "white",
+    color: "black",
+    border: "1px solid Black", /* Green */
+    float : "right",
+    padding : "2px"
+   
+  };
   const data = props.data.map(oneData=>{
     oneData.action = "<><i className='bx bx-show'></i><i className='bx bx-edit-alt'></i></>"
     return oneData
@@ -83,6 +109,12 @@ export default function Offres(props) {
 //       posterUrl:
 //         "https://images-na.ssl-images-amazon.com/images/M/MV5BMTUwODE3MDE0MV5BMl5BanBnXkFtZTgwNTk1MjI4MzE@._V1_SX300.jpg"
 //     }]
+
+// const modalStyle = {
+//   position : "fixed"
+  
+// };
+
   const tableData = {
     columns ,
     data
@@ -94,7 +126,48 @@ export default function Offres(props) {
 
 
     <div className="main">
+    
       <ExportToExcel apiData={data} fileName={fileName} />
+      
+      <Button style={mystyle} variant="" onClick={handleShow}>
+         Ajouter une offre 
+       </Button>
+      
+
+      <Modal  show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Nouvelle offre</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="name@example.com"
+                autoFocus
+              />
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Label>Example textarea</Form.Label>
+              <Form.Control as="textarea" rows={3} />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
       <DataTableExtensions {...tableData} export={false}>
         <DataTable
           columns={columns}
